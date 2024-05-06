@@ -2,5 +2,5 @@
 
 class UserSerializer < Blueprinter::Base
   identifier :id
-  fields :email
+  fields :email, :language_id
 end

@@ -14,7 +14,7 @@ class ApplicationRepository
   end
 
   delegate :model, to: :class
-  delegate :find_by, to: :model
+  delegate :find_by, :where, to: :model
   def all = model.all.to_a
   def find_by_id(id) = model.find_by(id:)
   def add(attrs) = model.create!(attrs)

@@ -9,7 +9,7 @@ module Api
         private
 
         def respond_with(resource, _opts = {})
-          render json: UserSerializer.render_as_json(resource)
+          render json: UserSerializer.render_as_json(resource), status: :ok
         end
 
         def respond_to_on_destroy

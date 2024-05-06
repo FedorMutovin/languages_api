@@ -17,7 +17,11 @@ module Api
         protected
 
         def configure_permitted_parameters
-          devise_parameter_sanitizer.permit(:sign_up, keys: %i[email password])
+          devise_parameter_sanitizer.permit(:sign_up, keys: %i[email password language_id])
+        end
+
+        def sign_up_params
+          params.require(:user).permit(:email, :password, :language_id)
         end
 
         private
@@ -27,7 +31,9 @@ module Api
         end
 
         def register_success
-          render json: { user: resource }, status: :created
+          token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil)[0]
+          response.set_header('Authorization', "Bearer #{token}")
+          render json: UserSerializer.render_as_json(resource), status: :created
         end
 
         def register_failed
