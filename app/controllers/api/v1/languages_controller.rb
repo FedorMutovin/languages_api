@@ -4,7 +4,10 @@ module Api
   module V1
     class LanguagesController < ApplicationController
       def index
-        render json: LanguageSerializer.render(LanguageRepository.new.all)
+        languages = Rails.cache.fetch('languages') do
+          LanguageRepository.new.all
+        end
+        render json: LanguageSerializer.render(languages)
       end
     end
   end

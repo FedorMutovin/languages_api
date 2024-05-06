@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :languages, only: [:index]
+      resources :account_learning_languages, only: [:create]
     end
   end
 end
