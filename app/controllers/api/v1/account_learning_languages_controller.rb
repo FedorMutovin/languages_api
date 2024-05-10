@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class AccountLearningLanguagesController < ApplicationController
+    class AccountLearningLanguagesController < BaseController
       def create
         repo = AccountLearningLanguageRepository.new
         resource = repo.add(account_learning_languages_params.merge(account: current_user.account))

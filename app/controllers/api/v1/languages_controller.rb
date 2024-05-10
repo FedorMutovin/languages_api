@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class LanguagesController < ApplicationController
+    class LanguagesController < BasePublicController
       def index
         languages = Rails.cache.fetch('languages') do
           LanguageRepository.new.all
