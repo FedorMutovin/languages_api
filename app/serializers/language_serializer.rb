@@ -2,5 +2,5 @@
 
 class LanguageSerializer < Blueprinter::Base
   identifier :id
-  fields :name
+  fields :name, :locale, :for_interface, :for_learning
 end

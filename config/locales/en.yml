@@ -28,4 +28,5 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  language_assistant:
+    welcome_message: "Hi, I'm Lexi, your AI language assistant. Ready to dive into language learning? I can help with translations and grammar corrections. What would you like to explore first?"
