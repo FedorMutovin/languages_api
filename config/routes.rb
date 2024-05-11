@@ -22,6 +22,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :languages, only: [:index]
       resources :account_learning_languages, only: [:create]
+
+      get 'language_assistant/message_history', to: 'language_assistant#message_history'
+      post 'language_assistant/create_message', to: 'language_assistant#create_message'
     end
   end
 end

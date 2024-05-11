@@ -42,9 +42,17 @@ gem 'oj'
 # Data migrations
 gem 'data_migrate'
 
+# chat-gpt API
+gem 'ruby-openai'
+
+# Application Service
+gem 'dry-initializer'
+gem 'dry-monads'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri windows]
+  gem 'rspec-rails', '~> 6.1.0'
   gem 'rubocop', require: false
   gem 'rubocop-performance'
   gem 'rubocop-rails'
@@ -56,4 +64,10 @@ group :development do
   gem 'letter_opener'
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+end
+
+group :test do
+  gem 'database_cleaner-active_record'
+  gem 'factory_bot_rails'
+  gem 'shoulda-matchers'
 end
