@@ -1,9 +1,23 @@
 # frozen_string_literal: true
 
 class Message < ApplicationRecord
-  belongs_to :history,
-             class_name: 'MessageHistory',
-             foreign_key: 'message_history_id',
-             inverse_of: :messages
+  after_create :broadcast_message
+  has_one :request,
+          class_name: 'Request',
+          foreign_key: 'request_message_id',
+          dependent: :destroy,
+          inverse_of: :request_message
+  has_one :response,
+          class_name: 'Request',
+          foreign_key: 'response_message_id',
+          dependent: :destroy,
+          inverse_of: :response_message
+  belongs_to :account
   validates :body, presence: true
+
+  private
+
+  def broadcast_message
+    MessagesChannel.broadcast_to(account, { messages: MessageSerializer.render_as_json(self) })
+  end
 end
