@@ -2,5 +2,5 @@
 
 class MessageSerializer < Blueprinter::Base
   identifier :id
-  fields :body, :assistant, :seen, :created_at
+  fields :body, :assistant, :created_at
 end

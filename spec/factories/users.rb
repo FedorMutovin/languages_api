@@ -7,6 +7,6 @@ FactoryBot.define do
   factory :user do
     email { generate(:email) }
     password { SecureRandom.hex(10) }
-    language_id { create(:language).id }
+    language
   end
 end
