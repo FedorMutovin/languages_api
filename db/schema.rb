@@ -71,7 +71,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
   end
 
   create_table "requests", force: :cascade do |t|
-    t.bigint "account_id", null: false
+    t.bigint "chat_id", null: false
     t.bigint "request_message_id", null: false
     t.bigint "response_message_id", null: false
     t.string "action", null: false
@@ -80,7 +80,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
     t.integer "total_tokens", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_requests_on_account_id"
+    t.index ["chat_id"], name: "index_requests_on_chat_id"
     t.index ["request_message_id"], name: "index_requests_on_request_message_id"
     t.index ["response_message_id"], name: "index_requests_on_response_message_id"
   end
@@ -108,7 +108,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
   add_foreign_key "accounts", "users"
   add_foreign_key "chats", "account_learning_languages"
   add_foreign_key "messages", "chats"
-  add_foreign_key "requests", "accounts"
+  add_foreign_key "requests", "chats"
   add_foreign_key "requests", "messages", column: "request_message_id"
   add_foreign_key "requests", "messages", column: "response_message_id"
   add_foreign_key "users", "languages"
