@@ -8,7 +8,9 @@ module Requests
     TEMPERATURE = 0.3
 
     option :request_message
-    option :account
+    option :chat
+    option :source_language, optional: true
+    option :target_language, optional: true
 
     def call
       time = Benchmark.realtime do
@@ -27,14 +29,8 @@ module Requests
     end
 
     def send_request(client)
-      options = {
-        model:,
-        messages:,
-        max_tokens:,
-        temperature: TEMPERATURE
-      }
-      Rails.logger.info("Options: #{options}")
-      response = client.chat(parameters: options)
+      Rails.logger.info("Options: #{parameters}")
+      response = client.chat(parameters:)
       Success(response)
     rescue Faraday::Error => e
       Rails.logger.debug e
@@ -55,7 +51,7 @@ module Requests
 
     def create_message(response)
       body = response.dig('choices', 0, 'message', 'content')
-      message = MessageRepository.new.add_assistant_message(body:, account:)
+      message = MessageRepository.new.add_assistant_message(body:, chat:)
       Success(message)
     end
 
@@ -68,13 +64,22 @@ module Requests
 
     def request_attributes(response_message, usage_data)
       {
-        account:,
+        chat:,
         request_message:,
         response_message:,
         action:,
         prompt_tokens: usage_data['prompt_tokens'],
         completion_tokens: usage_data['completion_tokens'],
         total_tokens: usage_data['total_tokens']
+      }
+    end
+
+    def parameters
+      {
+        model:,
+        messages:,
+        max_tokens:,
+        temperature: TEMPERATURE
       }
     end
 

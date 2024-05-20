@@ -12,12 +12,12 @@ class Message < ApplicationRecord
           foreign_key: 'response_message_id',
           dependent: :destroy,
           inverse_of: :response_message
-  belongs_to :account
+  belongs_to :chat
   validates :body, presence: true
 
   private
 
   def broadcast_message
-    MessagesChannel.broadcast_to(account, { messages: MessageSerializer.render_as_json(self) })
+    MessagesChannel.broadcast_to(chat, { messages: MessageSerializer.render_as_json(self) })
   end
 end

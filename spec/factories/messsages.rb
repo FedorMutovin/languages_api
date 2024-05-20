@@ -7,7 +7,7 @@ FactoryBot.define do
   FactoryBot.define do
     factory :message do
       body { generate(:body) }
-      account
+      chat
       trait :user do
         assistant { false }
       end
