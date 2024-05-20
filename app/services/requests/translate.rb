@@ -6,9 +6,6 @@ module Requests
     MAX_TOKENS = 100
     ACTION = 'translation'
 
-    option :source_language
-    option :target_language
-
     private
 
     def system_content

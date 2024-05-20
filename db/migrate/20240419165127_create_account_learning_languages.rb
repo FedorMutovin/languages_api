@@ -6,5 +6,7 @@ class CreateAccountLearningLanguages < ActiveRecord::Migration[7.1]
       
       t.timestamps
     end
+
+    add_index :account_learning_languages, [:account_id, :language_id], unique: true
   end
 end

@@ -6,7 +6,7 @@ RSpec.describe Requests::Translate do
   subject(:service) do
     described_class.call(
       request_message:,
-      account:,
+      chat:,
       source_language:,
       target_language:
     )
@@ -15,9 +15,9 @@ RSpec.describe Requests::Translate do
   let(:client) { instance_double(OpenAI::Client) }
   let(:message_repo) { instance_double(MessageRepository) }
   let(:request_repo) { instance_double(RequestRepository) }
-  let(:account) { build_stubbed(:account) }
+  let(:chat) { build_stubbed(:chat, :main) }
   let!(:request_message) { build_stubbed(:message, :user, body: 'Honeymoon') }
-  let(:response_message) { build_stubbed(:message, :assistant, body: 'Медовый месяц', account:) }
+  let(:response_message) { build_stubbed(:message, :assistant, body: 'Медовый месяц', chat:) }
   let(:request) { build_stubbed(:request, :translation) }
   let(:source_language) { 'English' }
   let(:target_language) { 'Russian' }
@@ -61,14 +61,14 @@ RSpec.describe Requests::Translate do
     it 'calls add_assistant_message for MessageRepository' do
       service
       expect(message_repo).to have_received(:add_assistant_message).with(
-        body: 'Медовый месяц', account:
+        body: 'Медовый месяц', chat:
       )
     end
 
     it 'calls add for RequestRepository' do
       service
       expect(request_repo).to have_received(:add).with(
-        account:,
+        chat:,
         request_message:,
         response_message:,
         action: 'translation',

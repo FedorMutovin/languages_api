@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "current", default: false, null: false
+    t.index ["account_id", "language_id"], name: "index_account_learning_languages_on_account_id_and_language_id", unique: true
     t.index ["account_id"], name: "index_account_learning_languages_on_account_id"
     t.index ["language_id"], name: "index_account_learning_languages_on_language_id"
   end
@@ -29,6 +30,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_accounts_on_user_id"
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.bigint "account_learning_language_id", null: false
+    t.string "topic", null: false
+    t.boolean "main", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_learning_language_id"], name: "index_chats_on_account_learning_language_id"
   end
 
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
@@ -42,22 +52,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
 
   create_table "languages", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "locale", null: false
     t.boolean "for_learning", default: false, null: false
     t.boolean "for_interface", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["locale"], name: "index_languages_on_locale", unique: true
     t.index ["name"], name: "index_languages_on_name", unique: true
   end
 
   create_table "messages", force: :cascade do |t|
-    t.bigint "account_id", null: false
+    t.bigint "chat_id", null: false
     t.text "body", null: false
     t.boolean "assistant", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_messages_on_account_id"
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
   end
 
   create_table "requests", force: :cascade do |t|
@@ -96,7 +106,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
   add_foreign_key "account_learning_languages", "accounts"
   add_foreign_key "account_learning_languages", "languages"
   add_foreign_key "accounts", "users"
-  add_foreign_key "messages", "accounts"
+  add_foreign_key "chats", "account_learning_languages"
+  add_foreign_key "messages", "chats"
   add_foreign_key "requests", "accounts"
   add_foreign_key "requests", "messages", column: "request_message_id"
   add_foreign_key "requests", "messages", column: "response_message_id"
