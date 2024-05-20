@@ -8,7 +8,7 @@ module Api
           languages = Rails.cache.fetch('languages') do
             LanguageRepository.new.all
           end
-          render json: LanguageSerializer.render(languages)
+          render json: LanguageSerializer.render(languages, view: :with_permissions )
         end
       end
     end

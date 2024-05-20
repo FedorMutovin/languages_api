@@ -21,7 +21,10 @@ Rails.application.routes.draw do
       end
 
       namespace :account do
-        resources :account_learning_languages, only: [:create]
+        resources :account_learning_languages, only: [:create] do
+
+        end
+        get "/account_learning_languages/current", to: "account_learning_languages#current"
       end
     end
   end

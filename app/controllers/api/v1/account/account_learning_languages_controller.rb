@@ -4,9 +4,17 @@ module Api
   module V1
     module Account
       class AccountLearningLanguagesController < Api::V1::BaseController
+        def current
+          repo = AccountLearningLanguageRepository.new
+          resource = repo.find_by(account_id: current_account.id, current: true)
+          render json: AccountLearningLanguageSerializer.render(resource)
+        end
+
         def create
           repo = AccountLearningLanguageRepository.new
-          resource = repo.add(account_learning_languages_params.merge(account: current_user.account))
+          resource = repo.add_current_learning_language(
+            account_learning_languages_params.merge(account: current_user.account)
+          )
           render json: AccountLearningLanguageSerializer.render(resource)
         end
 
