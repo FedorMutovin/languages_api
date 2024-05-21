@@ -83,7 +83,7 @@ module Requests
         messages:,
         max_tokens:,
         temperature: TEMPERATURE,
-        response_format: { type: "json_object" },
+        response_format: { type: 'json_object' }
       }
     end
 

@@ -9,14 +9,16 @@ module Requests
     private
 
     def system_content
-      "You are a professional translator.
-       Your task is to translate the given text from #{source_language} to #{target_language}.
-       Please return the response in JSON format like this: {\"translation\": \"[Translated text]\"}
-       Translated text should always start with a capital letter"
+      <<~PROMPT.squish
+        You are a professional translator.
+        Your task is to translate the given text from #{source_language} to #{target_language}.
+        Please return the response in JSON format like this: {"translation": "[Translated text]"}
+        Translated text should always start with a capital letter
+      PROMPT
     end
 
     def user_content
-      "Translate text from #{source_language} to #{target_language}: #{request_message.body["message"]}"
+      "Translate text from #{source_language} to #{target_language}: #{request_message.body['message']}"
     end
 
     def action
