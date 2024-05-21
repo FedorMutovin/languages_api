@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_10_163340) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_10_163340) do
     t.bigint "language_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "current", default: false, null: false
+    t.index ["account_id", "language_id"], name: "index_account_learning_languages_on_account_id_and_language_id", unique: true
     t.index ["account_id"], name: "index_account_learning_languages_on_account_id"
     t.index ["language_id"], name: "index_account_learning_languages_on_language_id"
   end
@@ -30,6 +32,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_10_163340) do
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
+  create_table "chats", force: :cascade do |t|
+    t.bigint "account_learning_language_id", null: false
+    t.string "topic", null: false
+    t.boolean "main", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_learning_language_id"], name: "index_chats_on_account_learning_language_id"
+  end
+
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
@@ -39,48 +50,39 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_10_163340) do
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
-  create_table "language_assistants", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.boolean "enabled", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_language_assistants_on_account_id"
-  end
-
   create_table "languages", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "locale", null: false
     t.boolean "for_learning", default: false, null: false
     t.boolean "for_interface", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["locale"], name: "index_languages_on_locale", unique: true
     t.index ["name"], name: "index_languages_on_name", unique: true
   end
 
-  create_table "message_histories", force: :cascade do |t|
-    t.bigint "language_assistant_id", null: false
-    t.bigint "message_history_category_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["language_assistant_id"], name: "index_message_histories_on_language_assistant_id"
-    t.index ["message_history_category_id"], name: "index_message_histories_on_message_history_category_id"
-  end
-
-  create_table "message_history_categories", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "messages", force: :cascade do |t|
-    t.bigint "message_history_id", null: false
-    t.text "body", null: false
-    t.boolean "seen", default: false
-    t.boolean "assistant", default: false
+    t.bigint "chat_id", null: false
+    t.jsonb "body", null: false
+    t.boolean "assistant", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["message_history_id"], name: "index_messages_on_message_history_id"
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
+  end
+
+  create_table "requests", force: :cascade do |t|
+    t.bigint "chat_id", null: false
+    t.bigint "request_message_id", null: false
+    t.bigint "response_message_id", null: false
+    t.string "action", null: false
+    t.integer "prompt_tokens", null: false
+    t.integer "completion_tokens", null: false
+    t.integer "total_tokens", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_requests_on_chat_id"
+    t.index ["request_message_id"], name: "index_requests_on_request_message_id"
+    t.index ["response_message_id"], name: "index_requests_on_response_message_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -104,9 +106,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_10_163340) do
   add_foreign_key "account_learning_languages", "accounts"
   add_foreign_key "account_learning_languages", "languages"
   add_foreign_key "accounts", "users"
-  add_foreign_key "language_assistants", "accounts"
-  add_foreign_key "message_histories", "language_assistants"
-  add_foreign_key "message_histories", "message_history_categories"
-  add_foreign_key "messages", "message_histories"
+  add_foreign_key "chats", "account_learning_languages"
+  add_foreign_key "messages", "chats"
+  add_foreign_key "requests", "chats"
+  add_foreign_key "requests", "messages", column: "request_message_id"
+  add_foreign_key "requests", "messages", column: "response_message_id"
   add_foreign_key "users", "languages"
 end

@@ -32,4 +32,4 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 .gitattributes
-config/credentials.yml.enc
+bin/dist

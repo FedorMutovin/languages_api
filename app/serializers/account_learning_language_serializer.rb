@@ -2,5 +2,7 @@
 
 class AccountLearningLanguageSerializer < Blueprinter::Base
   identifier :id
-  fields :account_id, :language_id
+  fields :account_id, :current
+  association :language, blueprint: LanguageSerializer
+  association :chats, blueprint: ChatSerializer
 end

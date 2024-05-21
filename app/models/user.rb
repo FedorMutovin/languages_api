@@ -9,11 +9,11 @@ class User < ApplicationRecord
 
   has_one :account, dependent: :destroy
   belongs_to :language
-  after_create :setup_account
+  after_create :create_account
 
   private
 
-  def setup_account
-    Accounts::Setup.call(user: self)
+  def create_account
+    AccountRepository.new.add(user: self)
   end
 end
