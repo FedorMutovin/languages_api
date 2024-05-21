@@ -16,7 +16,7 @@ module Requests
       time = Benchmark.realtime do
         @response = yield send_request(client)
       end
-      Rails.logger.info("Time taken: #{time} seconds.")
+      Rails.logger.info("chat_id: #{chat.id}: OpenAI response time: #{time} seconds with parameters: #{parameters}")
       response_message = yield create_message(@response)
       yield save_request(response_message, @response)
       Success(response_message)
@@ -29,11 +29,11 @@ module Requests
     end
 
     def send_request(client)
-      Rails.logger.info("Options: #{parameters}")
       response = client.chat(parameters:)
       Success(response)
     rescue Faraday::Error => e
       Rails.logger.debug e
+      Failure(e.message)
     end
 
     def messages
@@ -50,9 +50,12 @@ module Requests
     end
 
     def create_message(response)
-      body = response.dig('choices', 0, 'message', 'content')
+      body = JSON.parse(response.dig('choices', 0, 'message', 'content'))
       message = MessageRepository.new.add_assistant_message(body:, chat:)
       Success(message)
+    rescue JSON::ParserError => e
+      Rails.logger.debug e
+      Failure(e.message)
     end
 
     def save_request(response_message, response)
@@ -79,7 +82,8 @@ module Requests
         model:,
         messages:,
         max_tokens:,
-        temperature: TEMPERATURE
+        temperature: TEMPERATURE,
+        response_format: { type: "json_object" },
       }
     end
 

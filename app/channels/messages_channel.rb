@@ -10,7 +10,7 @@ class MessagesChannel < ApplicationCable::Channel
 
   def receive(data)
     repo = MessageRepository.new
-    request_message = repo.add_user_message(body: data['message'], chat:)
+    request_message = repo.add_user_message(message: data['message'], chat:)
     route_klass = Requests::Router.call(request: data['request'])
     route_klass.constantize.call(
       request_message:,
