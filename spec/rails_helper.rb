@@ -37,6 +37,8 @@ RSpec.configure do |config|
     Rails.root.join('spec/fixtures')
   ]
 
+  DatabaseCleaner.allow_remote_database_url = true
+
   config.include FactoryBot::Syntax::Methods
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
