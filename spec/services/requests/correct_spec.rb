@@ -17,17 +17,15 @@ RSpec.describe Requests::Correct do
       'correction' => 'I made a request yesterday.',
       'explanation' =>
         "The original sentence is incorrect because 'do request' is not the correct verb form for past tense. " \
-        "The correct past tense form of 'request' is 'requested,' but in this context,
-        'made a request' is more natural.",
-      'recommendations' => 'Practice using the past tense forms of verbs and familiarize yourself
-        with common verb phrases.'
+        "The correct past tense form of 'request' is 'requested,' but in this context, 'made a request' is more natural.",
+      'recommendations' => 'Practice using the past tense forms of verbs and familiarize yourself with common verb phrases.'
     }
   end
   let(:response_content) do
     "{\n  \"correction\": \"I made a request yesterday.\",\n  \"explanation\": \"" \
       "The original sentence is incorrect because 'do request' is not the correct verb form for past tense. " \
-      "The correct past tense form of 'request' is 'requested,' but in this context, 'made a request'
-        is more natural.\",\n  \"recommendations\": \"" \
+      "The correct past tense form of 'request' is 'requested,' but in this context, 'made a request' " \
+      "is more natural.\",\n  \"recommendations\": \"" \
       "Practice using the past tense forms of verbs and familiarize yourself with common verb phrases.\"\n}"
   end
 

@@ -15,7 +15,8 @@ module ApplicationCable
       payload = Warden::JWTAuth::TokenDecoder.new.call(token)
       user_id = payload['sub']
 
-      current_user = User.find_by(id: user_id)
+      repo = UserRepository.new
+      current_user = repo.find_by(id: user_id)
       return reject_unauthorized_connection unless current_user
 
       current_user

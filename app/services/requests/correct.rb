@@ -39,7 +39,6 @@ module Requests
     end
     # rubocop:enable Metrics/MethodLength
 
-
     def language
       account.learning_languages.first.name
     end
