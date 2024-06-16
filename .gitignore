@@ -33,3 +33,5 @@
 /config/master.key
 .gitattributes
 bin/dist
+
+/config/credentials/production.key
