@@ -15,7 +15,7 @@ module Requests
     # rubocop:disable Metrics/MethodLength
     def system_content
       <<~PROMPT.squish
-        You are an experienced, native English-speaking teacher with a strong background in grammar.
+        You are an experienced, native #{learning_language}-speaking teacher with a strong background in grammar.
         Your task is to explain the request provided by the student and provide a structured response in JSON format.
         Please use a friendly and supportive tone, similar to that of a mentor or coach.
         Keep in mind that you can only provide explanations related to learning languages, not other topics.
@@ -36,8 +36,5 @@ module Requests
     end
 
     # rubocop:enable Metrics/MethodLength
-    def user_language
-      user.language.name
-    end
   end
 end

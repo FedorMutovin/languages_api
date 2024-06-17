@@ -88,6 +88,14 @@ module Requests
       }
     end
 
+    def user_language
+      user.language.name
+    end
+
+    def learning_language
+      chat.account_learning_language.language.name
+    end
+
     def system_content
       raise NotImplementedError
     end
