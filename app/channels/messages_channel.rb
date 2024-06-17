@@ -9,9 +9,12 @@ class MessagesChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    repo = MessageRepository.new
-    request_message = repo.add_user_message(body: data['message'], chat:)
+    message_repo = MessageRepository.new
+    request_message = message_repo.add_user_message(body: data['message'], chat:)
     route_klass = Requests::Router.call(request: data['request'])
+    return unless route_klass
+
+    user = UserRepository.new.find_by(id: data['user_id'])
     route_klass.constantize.call(
       request_message:,
       chat:,
@@ -27,20 +30,11 @@ class MessagesChannel < ApplicationCable::Channel
     @chat ||= find_chat
   end
 
-  def user
-    @user ||= find_user
-  end
-
   def find_chat
     account_learning_language = AccountLearningLanguageRepository.new.find_current(
       id: params[:account_learning_language_id],
       account: current_user.account
     )
     ChatRepository.new.find_main(account_learning_language:)
-  end
-
-  def find_user
-    repo = UserRepository.new
-    repo.find(params[:user_id])
   end
 end
