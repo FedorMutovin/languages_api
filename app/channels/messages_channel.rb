@@ -10,11 +10,12 @@ class MessagesChannel < ApplicationCable::Channel
 
   def receive(data)
     repo = MessageRepository.new
-    request_message = repo.add_user_message(message: data['message'], chat:)
+    request_message = repo.add_user_message(body: data['message'], chat:)
     route_klass = Requests::Router.call(request: data['request'])
     route_klass.constantize.call(
       request_message:,
       chat:,
+      user:,
       source_language: data['source_language'],
       target_language: data['target_language']
     )
@@ -26,11 +27,20 @@ class MessagesChannel < ApplicationCable::Channel
     @chat ||= find_chat
   end
 
+  def user
+    @user ||= find_user
+  end
+
   def find_chat
     account_learning_language = AccountLearningLanguageRepository.new.find_current(
       id: params[:account_learning_language_id],
       account: current_user.account
     )
     ChatRepository.new.find_main(account_learning_language:)
+  end
+
+  def find_user
+    repo = UserRepository.new
+    repo.find(params[:user_id])
   end
 end
