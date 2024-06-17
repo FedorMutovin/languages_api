@@ -5,6 +5,7 @@ RSpec.shared_examples 'a request service' do |action|
   let(:message_repo) { instance_double(MessageRepository) }
   let(:request_repo) { instance_double(RequestRepository) }
   let(:chat) { build_stubbed(:chat, :main) }
+  let(:user) { build_stubbed(:user) }
   let(:response_message) { build_stubbed(:message, :assistant, body: response_body.to_json, chat:) }
   let(:request) { build_stubbed(:request, action.to_sym) }
   let(:response) do

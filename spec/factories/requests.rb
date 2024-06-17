@@ -7,19 +7,23 @@ FactoryBot.define do
     chat
     request_message factory: %i[message]
     response_message factory: %i[message]
-    action { 'translation' }
+    action { 'translate' }
     prompt_tokens { 100 }
     completion_tokens { 50 }
     total_tokens { 150 }
     created_at { Time.current }
     updated_at { Time.current }
 
-    trait :translation do
-      action { 'translation' }
+    trait :translate do
+      action { 'translate' }
     end
 
-    trait :correction do
-      action { 'correction' }
+    trait :correct do
+      action { 'correct' }
+    end
+
+    trait :explain do
+      action { 'explain' }
     end
   end
 end

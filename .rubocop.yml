@@ -2,8 +2,8 @@ require:
   - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
-  - rubocop-factory_bot
 AllCops:
+  SuggestExtensions: false
   NewCops: enable
   Exclude:
     - 'db/**/*'

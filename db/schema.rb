@@ -41,9 +41,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
     t.index ["account_learning_language_id"], name: "index_chats_on_account_learning_language_id"
   end
 
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
   create_table "jwt_denylist", force: :cascade do |t|
     t.string "jti", null: false
     t.datetime "exp", null: false
@@ -63,7 +60,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_19_145151) do
 
   create_table "messages", force: :cascade do |t|
     t.bigint "chat_id", null: false
-    t.jsonb "body", null: false
+    t.text "body", null: false
     t.boolean "assistant", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
